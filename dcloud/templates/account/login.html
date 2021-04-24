@@ -8,6 +8,11 @@
 {% block head %}
   <link rel="stylesheet" href="{% static 'css/login.css' %}?{% now 'U' %}">
 {% endblock %}
+{% block header %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'account_signup' %}">signup</a>
+  </li>
+{% endblock %}
 {% block content %}
 
 <div class="container mt-3 bg-dark" id="login">
