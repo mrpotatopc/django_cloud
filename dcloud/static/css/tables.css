@@ -1,0 +1,12 @@
+table{
+  margin: auto;
+  max-width: 80%;
+  border-collapse: collapse;
+  border-radius: 1em;
+  overflow: hidden;
+  border-width: 50px;
+
+}
+tr{
+  max-width: 100%;
+}
