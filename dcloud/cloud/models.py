@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import os
+from django.dispatch import receiver
 
 # Create your models here.
 class UserPartition(models.Model):
@@ -40,3 +41,14 @@ class File(models.Model):
             value = round(x/1000000000, 2)
             ext = ' Gb'
         return str(value)+ext
+
+
+@receiver(models.signals.post_delete, sender=File)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `MediaFile` object is deleted.
+    """
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)
