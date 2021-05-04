@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import UserPartition,Folder,File
+from .models import UserPartition,Folder,File,Cfolder
 from django.contrib.auth.models import User
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic import TemplateView,DetailView,ListView,View
@@ -30,6 +30,7 @@ class HomepageView(LoginRequiredMixin,ListView):
     def get_queryset(self):
         return UserPartition.objects.filter(user=self.request.user)
 
+
 @login_required
 def PartitionView(request,id):
     P = UserPartition.objects.get(id=id)
@@ -45,12 +46,27 @@ def FolderView(request,id1,id2):
     P = UserPartition.objects.get(id=id1)
     F = Folder.objects.get(id=id2)
     file = F.file_set.order_by('-id')
+    chfolder = F.cfolder_set.order_by('-id')
     context={
         'folder':F,
-        'files':file
+        'files':file,
+        'cfolders':chfolder
     }
 
     return render(request, 'home/folder.html',context)
+
+@login_required
+def CfolderView(request,id):
+    F = Cfolder.objects.get(id=id)
+    file = F.file_set.order_by('-id')
+    chfolder = F.cfolder_set.order_by('-id')
+    context={
+        'folder':F,
+        'files':file,
+        'cfolders':chfolder
+    }
+
+    return render(request, 'home/cfolder.html',context)
 
 class UserPartitionCreateView(LoginRequiredMixin,RedirectToPreviousMixin,CreateView):
     model = UserPartition
@@ -71,9 +87,41 @@ class FolderCreateView(LoginRequiredMixin,RedirectToPreviousMixin,CreateView) :
         form.instance.partition = P
         return super(FolderCreateView, self).form_valid(form)
 
+class CFolderCreateView1(LoginRequiredMixin,RedirectToPreviousMixin,CreateView) :
+    model = Cfolder
+    action = 'create Folder'
+    fields = ['name']
+
+    def form_valid(self, form):
+        P = get_object_or_404(Folder, id=self.kwargs['id'])
+        form.instance.pfolder1 = P
+        return super(CFolderCreateView1, self).form_valid(form)
+
+class CFolderCreateView2(LoginRequiredMixin,RedirectToPreviousMixin,CreateView) :
+    model = Cfolder
+    action = 'create Folder'
+    fields = ['name']
+
+    def form_valid(self, form):
+        P = get_object_or_404(Cfolder, id=self.kwargs['id'])
+        form.instance.pfolder2 = P
+        return super(CFolderCreateView2, self).form_valid(form)
+
+
+
+class CfolderFileCreateView(LoginRequiredMixin,RedirectToPreviousMixin,CreateView) :
+    model = File
+    action = 'add file'
+    fields = ['file']
+
+    def form_valid(self, form):
+        F = get_object_or_404(Cfolder, id=self.kwargs['id'])
+        form.instance.folder2 = F
+        return super(CfolderFileCreateView, self).form_valid(form)
+
 class FileCreateView(LoginRequiredMixin,RedirectToPreviousMixin,CreateView) :
     model = File
-    action = 'create File'
+    action = 'add File'
     fields = ['file']
 
     def form_valid(self, form):
@@ -87,6 +135,10 @@ class UserPartitionDeleteView(LoginRequiredMixin,RedirectToPreviousMixin,DeleteV
 
 class FolderDeleteView(LoginRequiredMixin,RedirectToPreviousMixin,DeleteView):
     model = Folder
+    action = 'delete folder'
+
+class CfolderDeleteView(LoginRequiredMixin,RedirectToPreviousMixin,DeleteView):
+    model = Cfolder
     action = 'delete folder'
 
 class FileDeleteView(LoginRequiredMixin,RedirectToPreviousMixin,DeleteView):

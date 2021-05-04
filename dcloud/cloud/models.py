@@ -12,14 +12,24 @@ class UserPartition(models.Model):
         return self.name
 
 class Folder(models.Model):
-    partition = models.ForeignKey(UserPartition,on_delete=models.CASCADE)
+    parent_folder = models.ForeignKey('self',on_delete=models.CASCADE,blank=True, null=True)
+    partition = models.ForeignKey(UserPartition,on_delete=models.CASCADE,blank=True, null=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class Cfolder(models.Model):
+    pfolder1 = models.ForeignKey(Folder,on_delete=models.CASCADE,blank=True,null=True)
+    pfolder2 = models.ForeignKey('self',on_delete=models.CASCADE,blank=True,null=True)
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
 class File(models.Model):
-    folder = models.ForeignKey(Folder,on_delete=models.CASCADE)
+    folder = models.ForeignKey(Folder,on_delete=models.CASCADE,blank=True,null=True)
+    folder2 = models.ForeignKey(Cfolder,on_delete=models.CASCADE,blank=True,null=True)
     file = models.FileField(upload_to='files')
 
     def __str__(self):

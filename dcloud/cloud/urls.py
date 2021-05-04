@@ -15,5 +15,10 @@ urlpatterns = [
     path('delete/Folder/<int:pk>/',views.FolderDeleteView.as_view(),name="delete_folder"),
     path('delete/file/<int:pk>/',views.FileDeleteView.as_view(),name="delete_file"),
     path('update/partition/<int:pk>/',views.UserPartitionUpdateView.as_view(),name="update_partition"),
-    path('update/Folder/<int:pk>/',views.FolderUpdateView.as_view(),name="update_folder"),   
+    path('update/Folder/<int:pk>/',views.FolderUpdateView.as_view(),name="update_folder"),
+    path('add/cfolder/to/folder/<int:id>/',views.CFolderCreateView1.as_view(),name="add_cfolder_to_folder"),
+    path('add/cfolder/to/cfolder/<int:id>/',views.CFolderCreateView2.as_view(),name="add_cfolder_to_cfolder"),
+    path('cfolder/<int:id>/',views.CfolderView,name="cfolder"),
+    path('add/cfolder/file/<int:id>/',views.CfolderFileCreateView.as_view(),name="add_file2"),
+    path('delete/CFolder/<int:pk>/',views.CfolderDeleteView.as_view(),name="delete_Cfolder"),
 ]

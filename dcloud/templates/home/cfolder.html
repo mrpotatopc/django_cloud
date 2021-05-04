@@ -7,15 +7,15 @@
 
 
 {% block content %}
-<button type="button" class="btn btn-dark"><a class="nav-link" style="color:white;" href="{% url 'cloud:add_File' folder.partition.id folder.id %}">add file</a></button>
-<button type="button" class="btn btn-dark"><a class="nav-link" style="color:white;" href="{% url 'cloud:add_cfolder_to_folder' folder.id %}">add folder</a></button>
+<button type="button" class="btn btn-dark"><a class="nav-link" style="color:white;" href="{% url 'cloud:add_file2' folder.id %}">add file</a></button>
+<button type="button" class="btn btn-dark"><a class="nav-link" style="color:white;" href="{% url 'cloud:add_cfolder_to_cfolder' folder.id %}">add folder</a></button>
  <div class="mt-5">
    <table id="table" class="table table-dark table-striped">
     {% for cfolder in cfolders %}
       <tr>
         <td>{{cfolder.name}}</td>
         <td>{{cfolder.file_set.all|length}}</td>
-        <td><button type="button" class="btn btn-primary" style="color:white;"><a href="{% url 'cloud:cfolder' folder.id %}" style="text-decoration:none; color:black;">view</a></button></td>
+        <td><button type="button" class="btn btn-primary" style="color:white;"><a href="{% url 'cloud:cfolder' cfolder.id %}" style="text-decoration:none; color:black;">view</a></button></td>
         <td>
           <!-- Example split danger button -->
           <div class="btn-group dropstart">
@@ -23,7 +23,7 @@
               <span class="visually-hidden">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">delete</a></li>
+              <li><a class="dropdown-item" href="{% url 'cloud:delete_Cfolder' cfolder.pk %}">delete</a></li>
             </ul>
           </div>
         </td>
